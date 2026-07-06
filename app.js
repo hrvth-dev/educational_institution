@@ -6,7 +6,7 @@ const dotenv = require("dotenv");
 const prisma = require("../backend/config/prisma.js");
 const authRouter = require("../backend/routes/authRoutes.js");
 const userRouter = require("../backend/routes/userRouters.js");
-
+const coursesRouter = require("../backend/routes/courseRoutes.js");
 
 dotenv.config();
 
@@ -16,6 +16,7 @@ app.use(cors());
 
 app.use("/api/auth", authRouter);
 app.use("/api/users", userRouter);
+app.use("/api", coursesRouter);
 
 
 

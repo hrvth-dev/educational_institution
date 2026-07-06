@@ -1,0 +1,8 @@
+-- AlterTable
+ALTER TABLE `course` ADD COLUMN `creatorId` INTEGER NOT NULL DEFAULT 1;
+
+-- AlterTable
+ALTER TABLE `user` ADD COLUMN `role` VARCHAR(191) NOT NULL DEFAULT 'USER';
+
+-- AddForeignKey
+ALTER TABLE `Course` ADD CONSTRAINT `Course_creatorId_fkey` FOREIGN KEY (`creatorId`) REFERENCES `User`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;

@@ -15,17 +15,18 @@ const getAllProfile = async (req, res) => {
         });
 
 
-        if(!users){
-            res.status(404).json({message: "Nincs egy felhasználó sem!"});
+        if (!users) {
+            res.status(404).json({ message: "Nincs egy felhasználó sem!" });
         }
 
-        res.json(users);
+        return res.status(200).json({ message: "Sikeresen lekérdezted a profilokat!", data: users });
 
 
     }
 
     catch (err) {
-        res.status(500).json({ message: "Hiba történt a lekérdezés során!" });
+        console.log(err)
+        return res.status(500).json({ message: "Hiba történt a lekérdezés során!", err: err.message });
     }
 
 }
@@ -53,11 +54,12 @@ const getProfile = async (req, res) => {
         })
 
 
-        res.json({ data: getUser });
+        return res.status(200).json({ message: "Sikeresen lekérdeztél egy profilt!", data: getUser });
     }
 
     catch (err) {
-        res.status(500).json({ message: "Hiba történt a lekérdezés során!" });
+        console.log(err)
+        return res.status(500).json({ message: "Hiba történt a lekérdezés során!", err: err.message });
     }
 
 }
@@ -89,12 +91,13 @@ const updatedProfile = async (req, res) => {
 
         })
 
-        res.json({ message: "Sikeresen frissíteted a felhasználó adatait!", user: updatedUser });
+        return res.status(200).json({ message: "Sikeresen frissíteted a felhasználó adatait!", user: updatedUser });
 
     }
 
     catch (err) {
-        res.status(500).json({ message: "Hiba történt a lekérdezés során!" });
+        console.log(err)
+        return res.status(500).json({ message: "Hiba történt a modosítás során!", err: err.message });
     }
 };
 
@@ -122,16 +125,17 @@ const deletedProfile = async (req, res) => {
             }
         );
 
-        res.json({ message: "Sikeresen törölted a felhasználót!" });
+        return res.status(200).json({ message: "Sikeresen törölted a felhasználót!" });
 
     }
 
     catch (err) {
-        res.status(500).json({ message: "Hiba történt a lekérdezés során!" });
+        console.log(err)
+        return res.status(500).json({ message: "Hiba történt a törlés során!", err: err.message });
     }
 
 };
 
 
 
-module.exports = { getProfile, updatedProfile, deletedProfile, getAllProfile};
+module.exports = { getProfile, updatedProfile, deletedProfile, getAllProfile };

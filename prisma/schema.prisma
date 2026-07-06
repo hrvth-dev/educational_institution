@@ -8,57 +8,59 @@ datasource db {
 }
 
 model User {
-  id  Int  @id @default(autoincrement())
-  
-  role      String   @default("USER")
-  
-  username  String   @unique
-  password  String
+  id Int @id @default(autoincrement())
+
+  role String @default("USER")
+
+  username String @unique
+  password String
 
   firstName String
   lastName  String
-  email     String   @unique
+  email     String  @unique
   phone     String?
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-    
-  enrollments Enrollment[]
 
-} 
-
-
-model Course {
-  id  Int @id @default(autoincrement())
-
-  name String
-  description String @db.Text
-
-  startDate DateTime
-  endDate DateTime
-
-  lessonCount Int
-  lessonLength Int 
-
-  maxStudents Int
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  createdCourses Course[] @relation("CreatedCourses")
 
   enrollments Enrollment[]
 }
 
+model Course {
+  id Int @id @default(autoincrement())
+
+  name        String
+  description String @db.Text
+
+  startDate DateTime
+  endDate   DateTime
+
+  lessonCount  Int
+  lessonLength Int
+  maxStudents  Int
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  creatorId Int @default(1)
+
+  creator User @relation("CreatedCourses", fields: [creatorId], references: [id], onDelete: Cascade)
+
+  enrollments Enrollment[]
+}
 
 model Enrollment {
-  id        Int      @id @default(autoincrement())
+  id Int @id @default(autoincrement())
 
-  userId    Int
-  courseId  Int
+  userId   Int
+  courseId Int
 
   createdAt DateTime @default(now())
 
-  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  course    Course   @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  course Course @relation(fields: [courseId], references: [id], onDelete: Cascade)
 
   @@unique([userId, courseId])
 }

@@ -21,12 +21,13 @@ const register = async (req, res) => {
             }
         })
 
-        res.json({ message: "Sikeresen létrehoztál egy fiókot!" });
+        return res.status(201).json({ message: "Sikeresen létrehoztál egy fiókot!" });
 
     }
 
     catch (err) {
-        res.status(500).json({ message: "Hiba történt a lekérdezés során!" });
+        console.log(err)
+        return res.status(500).json({ message: "Hiba történt a létrehozás során!", err: err.message });
     }
 
 }
@@ -36,14 +37,14 @@ const login = async (req, res) => {
 
     try {
 
-        const { email, password } = req.body
+        const { username, password } = req.body
 
         const user = await prisma.user.findUnique({
-            where: { email },
+            where: { username },
         })
 
         if (!user) {
-            res.status(404).json({ message: "Nem található ilyen felhasználó!" });
+            return res.status(404).json({ message: "Nem található ilyen felhasználó!" });
         }
 
         const isMatch = await bcrypt.compare(password, user.password);
@@ -54,6 +55,7 @@ const login = async (req, res) => {
 
         const token = jwt.sign({
             userId: user.id,
+            username: user.username,
             email: user.email,
         },
             process.env.JWT_SECRET,
@@ -69,7 +71,8 @@ const login = async (req, res) => {
     }
 
     catch (err) {
-        res.status(500).json({ message: "Hiba történt a lekérdezés során!" });
+        console.log(err)
+        return res.status(500).json({ message: "Hiba történt a lekérdezés során!", err: err.message });
     }
 
 }
